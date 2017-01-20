@@ -26,19 +26,19 @@ then
   APP_DIR=/app/$APP_NAMESPACE
   BUILD_DIR=$(pwd)
   RUNTIME_DIR=$BUILD_DIR/$APP_NAMESPACE
-  
-  # Include .dotfiles in `mv *` commands;
-  # carry forward .dotfiles to the runtime.
-  shopt -s dotglob
 
   mkdir -p $APP_DIR
   mv $BUILD_DIR/* $APP_DIR/
+  # Move .dotfiles too
+  find $BUILD_DIR -maxdepth 1 -type f -name '.*' -exec mv -n {} $APP_DIR/ \;
   cd $APP_DIR
 
   npm run build
 
   mkdir -p $RUNTIME_DIR
   mv $APP_DIR/* $RUNTIME_DIR/
+  # Move .dotfiles too
+  find $APP_DIR -maxdepth 1 -type f -name '.*' -exec mv -n {} $RUNTIME_DIR/ \;
   cd $BUILD_DIR
 
   # Put artifacts required by Heroku runtime at root of app.
