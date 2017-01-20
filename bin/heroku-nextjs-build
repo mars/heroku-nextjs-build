@@ -28,12 +28,18 @@ then
   RUNTIME_DIR=$BUILD_DIR/$APP_NAMESPACE
 
   mkdir -p $APP_DIR
+  # Move app source to runtime-compatible prefix for `next build`.
   mv $BUILD_DIR/* $APP_DIR/
+  # Move .dotfiles too, like `.babelrc`
+  # (Node buildpack's .dotdirs must remain in-place.)
+  find $BUILD_DIR -maxdepth 1 -type f -name '.*' -exec mv -n {} $APP_DIR/ \;
   cd $APP_DIR
 
   npm run build
 
   mkdir -p $RUNTIME_DIR
+  # Move build Next app to build output directory to be included in slug,
+  # including all .dotfiles & .dotdirs
   mv $APP_DIR/* $APP_DIR/.[!.]* $RUNTIME_DIR/
   cd $BUILD_DIR
 
