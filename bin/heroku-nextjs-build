@@ -11,6 +11,7 @@ set -u
 
 # Default to 'development' env
 NODE_ENV=${NODE_ENV:-development}
+BUILD_DIR=$(pwd)
 
 # This adapter performs the production build in a directory prefix 
 # compatible with Heroku dyno runtime, `/app/nextjs`.
@@ -20,11 +21,13 @@ NODE_ENV=${NODE_ENV:-development}
 # are performed in a randomly-named temporary directory, these absolute 
 # paths go missing, resulting in server errors.
 #
-if [ "$NODE_ENV" = production ]
+# This workaround may be unneccesary (and so automatically skipped)
+# in environments that already perform the build at /app.
+#
+if [ "$NODE_ENV" = "production" ] && [ ! "$BUILD_DIR" = "/app"  ]
 then
   APP_NAMESPACE=nextjs
   APP_DIR=/app/$APP_NAMESPACE
-  BUILD_DIR=$(pwd)
   RUNTIME_DIR=$BUILD_DIR/$APP_NAMESPACE
 
   mkdir -p $APP_DIR
@@ -58,4 +61,6 @@ then
 }
 HEREDOC
 
+else
+  npm run build
 fi
