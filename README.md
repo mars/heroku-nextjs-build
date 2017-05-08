@@ -1,5 +1,3 @@
-# Heroku Next.js build
+# Heroku [Next.js](https://github.com/zeit/next.js) build
 
-Adapter to build [Next.js](https://github.com/zeit/next.js) apps on [Heroku](https://www.heroku.com).
-
-See the example app for [usage instructions](https://github.com/mars/heroku-nextjs).
+🌈 In February 2017, [Next was fixed](https://github.com/zeit/next.js/pull/1164) so that it no longer requires a static build path. As a result, **this build adapter is no longer required**. Next may be deployed to Heroku without any special setup.
